@@ -39,7 +39,7 @@ func GetCPUSection() (string, error) {
 		return "", err
 	}
 
-	output := fmt.Sprintf("CPU: %s\nCores: %d", cpuStat[0].ModelName, len(cpuStat))
+	output := fmt.Sprintf("CPU: %s\nCores: %d", cpuStat[0].ModelName, cpuStat[0].Cores)
 	return output, nil
 }
 
