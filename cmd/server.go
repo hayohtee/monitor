@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/hayohtee/monitor/internal/htmx"
+	"github.com/hayohtee/monitor/static"
 )
 
 type server struct {
@@ -15,6 +15,6 @@ func NewServer() *server {
 	s := server{
 		subscriberMessageBuffer: 10,
 	}
-	s.mux.Handle("/", http.FileServerFS(htmx.PageFS))
+	s.mux.Handle("/", http.FileServerFS(static.Files))
 	return &s
 }
