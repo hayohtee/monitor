@@ -41,7 +41,7 @@ func main() {
 
 			s.broadcast([]byte(htmlContainer))
 
-			time.Sleep(3 * time.Second)
+			time.Sleep(time.Second)
 		}
 	}(srv)
 
