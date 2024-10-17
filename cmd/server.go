@@ -26,7 +26,7 @@ func NewServer() *server {
 
 	s.mux.Handle("/", http.FileServerFS(static.Files))
 	s.mux.HandleFunc("/ws", s.subscribeHandler)
-	
+
 	return &s
 }
 
@@ -73,4 +73,12 @@ func (s *server) addSubscriber(sub *subscriber) {
 	s.subscribers[sub] = struct{}{}
 	s.mu.Unlock()
 	log.Println(sub, "subscriber added")
+}
+
+func (s *server) broadcast(msg []byte) {
+	s.mu.Lock()
+	for sub := range s.subscribers {
+		sub.msgs <- msg
+	}
+	s.mu.Unlock()
 }
