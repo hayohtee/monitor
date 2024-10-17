@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -11,7 +10,9 @@ import (
 
 func main() {
 	log.Println("starting system monitor")
-	go func() {
+	srv := NewServer()
+
+	go func(s *server) {
 		for {
 			systemSection, err := hardware.GetSystemSection()
 			if err != nil {
@@ -28,15 +29,14 @@ func main() {
 				log.Fatal(err)
 			}
 
-			fmt.Println(systemSection)
-			fmt.Println(diskSection)
-			fmt.Println(cpuSection)
+			s.broadcast([]byte(systemSection))
+			s.broadcast([]byte(cpuSection))
+			s.broadcast([]byte(diskSection))
 
 			time.Sleep(3 * time.Second)
 		}
-	}()
-	
-	srv := NewServer()
+	}(srv)
+
 	err := http.ListenAndServe(":4000", &srv.mux)
 	if err != nil {
 		log.Fatal(err)
