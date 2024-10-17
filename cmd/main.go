@@ -29,9 +29,17 @@ func main() {
 				log.Fatal(err)
 			}
 
-			s.broadcast([]byte(systemSection))
-			s.broadcast([]byte(cpuSection))
-			s.broadcast([]byte(diskSection))
+			timestamp := time.Now().Format("2006-01-02 15:04:05")
+
+			htmlContainer := `
+			<div hx-swap-oob="innerHTML:#update-timestamp">
+				<p><i style="color: green" class="fa fa-circle"></i> ` + timestamp + `</p>
+		 	 </div>
+		  	<div hx-swap-oob="innerHTML:#system-data">` + systemSection + `</div>
+		  	<div hx-swap-oob="innerHTML:#cpu-data">` + cpuSection + `</div>
+		  	<div hx-swap-oob="innerHTML:#disk-data">` + diskSection + `</div>`
+
+			s.broadcast([]byte(htmlContainer))
 
 			time.Sleep(3 * time.Second)
 		}
