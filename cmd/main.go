@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/hayohtee/monitor/internal/hardware"
@@ -34,5 +35,10 @@ func main() {
 			time.Sleep(3 * time.Second)
 		}
 	}()
-	time.Sleep(5 * time.Minute)
+	
+	srv := NewServer()
+	err := http.ListenAndServe(":4000", &srv.mux)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
